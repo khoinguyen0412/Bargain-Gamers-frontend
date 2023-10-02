@@ -1,5 +1,6 @@
 <script setup>
     import axios from 'axios'
+
 </script>
 
 <script>
@@ -13,7 +14,7 @@
                 },
                 responseData:null,
                 responseMessage:null,
-                csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                csrfToken: this.getCookie('XSRF-TOKEN')
             }
         },
 
@@ -24,7 +25,12 @@
                 e.preventDefault();
                 RegisterTab.click()
             })
+
+            if (!this.csrfToken){
+                const cookieResponse = axios.get('/sanctum/csrf-cookie')
+            }
         },
+
         methods:{
             showPassword(){
                 var x = document.getElementById('password')
@@ -61,33 +67,56 @@
             },
             
             async handleRegister(){
-                await axios.get('/sanctum/csrf-cookie')
+                const overlay = document.getElementById('overlay')
+                const errorInput = document.getElementById('errorInput')
+
+                overlay.style.display = 'flex'
+                
                 await axios.post('/api/register',{
-                    username: this.signUpData['username'],
-                    email: this.signUpData['email'],
-                    password: this.signUpData['password'],
-                })
-                .then(response => {
-                    console.log(response)
-                    if(response.data['code'] != 0){
-                        this.responseMessage = response.data["messageObject"];
-                        const errorArray = []
-                        for (const field in this.responseMessage) {
-                            errorArray.push(...this.responseMessage[field]);
-                        }
-                        this.responseMessage = errorArray
-                    }
-                    else{
-                        this.responseMessage = null
-                    }
-                   
+                        username: this.signUpData['username'],
+                        email: this.signUpData['email'],
+                        password: this.signUpData['password'],
                     })
-                .catch(error => {
-                console.error(error);
-                });
+                    .then(response => {
+                        console.log(response)
+                        if(response.data['code'] != 0){
+                            this.responseMessage = response.data["messageObject"];
+                            const errorArray = []
+                            for (const field in this.responseMessage) {
+                                errorArray.push(...this.responseMessage[field]);
+                            }
+                            this.responseMessage = errorArray
+                            errorInput.style.display = 'block'
+                        }
+                        else{
+                            this.responseMessage = null
+                            errorInput.style.display = 'none'
+                            toastr.options.positionClass = 'toast-top-center'
+                            toastr.options.closeButton = 'true'
+                            toastr.success("Susccesfully register!")
+                        }
+                        overlay.style.display = 'none'
+                        
+                        })
+                    .catch(error => {
+                    this.responseMessage = null
+                    errorInput.style.display = 'none'
+                    overlay.style.display = 'none'
+                    console.error(error);
+                    });
+                },
+            
+            getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) {
+                    return parts.pop().split(';').shift();
+                }
+                return null;
+                },
+
             }
         }
-    }
 
 </script>
 
@@ -335,6 +364,7 @@
     #errorInput{
         color:red;
         overflow-y: auto;
+        display: none;
         padding-right: 20px;
         max-height: 70px;
 
