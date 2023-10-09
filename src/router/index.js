@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainView from '../views/MainView.vue'
+import store from '../store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,23 +13,32 @@ const router = createRouter({
     {
       path: '/auth',
       name: 'auth',
-      component: () => import('../views/AuthView.vue')
+      component: () => import('../views/AuthView.vue'),
+      meta: {auth:false}
     },
+
     {
       path: '/main',
       name: 'main',
-      component: MainView,
-      beforeEnter: (to,from) => {
-        alert('Not authorized')
-        return router.push('/')
-      }
+      component: ()=> import('../views/MainView.vue')
     },
-    
+
+    {
+      path: '/profile/:username'      
+    },
+
+
+    {
+      path: '/profile/:username/edit',
+      meta: {auth: true},
+    },
+
     {
       path:  '/:catchAll(.*)',
       redirect: '404'
     },
 
+   
     {
       path: '/404',
       name: '404',
@@ -38,6 +47,16 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async(to,from) => {})
+router.beforeEach(async(to,from,next) => {
+  if (to.meta.auth && !store.getters.getAuth){
+      next("/auth")
+  }
+  if(!to.meta.auth && store.getters.getAuth){
+    next("/404")
+  }
+  else{
+    next()
+  }
+})
 
 export default router

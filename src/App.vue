@@ -10,6 +10,7 @@
 
 </script>
 
+
 <template>
     <div id= "loader-wrapper">
         <span class="loader"><span class="loader-inner"></span></span>

@@ -12,26 +12,28 @@
                     username: '',
                     password: ''
                 },
-                responseData:null,
-                responseMessage:null,
+                loginData:{
+                    username: '',
+                    password: '',
+                },
+                overlay:null,
+                loginMessage: null,
+                registerMessage:null,
                 csrfToken: this.getCookie('XSRF-TOKEN')
             }
         },
 
-        mounted(){
-            var registerLink = document.getElementById('register-link')
-            var RegisterTab = document.getElementById('pills-register-tab')
-            registerLink.addEventListener('click', function(e){
-                e.preventDefault();
-                RegisterTab.click()
-            })
-
-            if (!this.csrfToken){
-                const cookieResponse = axios.get('/sanctum/csrf-cookie')
-            }
-        },
-
         methods:{
+            clickRegisterTab(){
+                var RegisterTab = document.getElementById('pills-register-tab')
+                RegisterTab.click()
+            },
+
+            clickLoginTab(){
+                var LoginTab = document.getElementById('pills-login-tab')
+                LoginTab.click()
+            },
+
             showPassword(){
                 var x = document.getElementById('password')
                 var showPassword = document.getElementById('show-password-login')
@@ -60,17 +62,46 @@
                 }
             },
 
-            handleLogin(){
-                axios.get('/sanctum/csrf-cookie').then(response=>{
-                    console.log(response)
+            async handleLogin(){
+                const errorLogin = document.getElementById('errorLogin')
+                this.overlay.style.display = 'flex'
+    
+                await axios.post('/api/login',{
+                    username: this.loginData['username'],
+                    password: this.loginData['password'],
+                })
+                .then(response =>{
+                    if(response.data['code'] != 1){
+                        errorLogin.style.display = 'block'
+                        this.$store.dispatch('login')
+                        toastr.options.positionClass = 'toast-top-center'
+                        toastr.options.closeButton = 'true'
+                        toastr.success("Susccesfully login!")
+                    }
+                    else{
+                        const errorArray = []
+                        for (const field in response.data['messageObject']) {
+                                errorArray.push(response.data['messageObject'][field]);
+                        }
+                        this.loginMessage = errorArray
+                        errorLogin.style.display = 'block'
+
+                    }
+                    this.overlay.style.display = 'none'
+                    
+                })
+                .catch(error =>{
+                    this.loginMessage = null
+                    errorLogin.style.display = 'none'
+                    this.overlay.style.display = 'none'
+                    console.log(error)
                 })
             },
             
             async handleRegister(){
-                const overlay = document.getElementById('overlay')
-                const errorInput = document.getElementById('errorInput')
+                const errorRegister = document.getElementById('errorRegister')
 
-                overlay.style.display = 'flex'
+                this.overlay.style.display = 'flex'
                 
                 await axios.post('/api/register',{
                         username: this.signUpData['username'],
@@ -78,30 +109,34 @@
                         password: this.signUpData['password'],
                     })
                     .then(response => {
-                        console.log(response)
                         if(response.data['code'] != 0){
-                            this.responseMessage = response.data["messageObject"];
                             const errorArray = []
-                            for (const field in this.responseMessage) {
-                                errorArray.push(...this.responseMessage[field]);
+                            for (const field in response.data["messageObject"]) {
+                                errorArray.push(...response.data['messageObject'][field])
                             }
-                            this.responseMessage = errorArray
-                            errorInput.style.display = 'block'
+                            this.registerMessage = errorArray
+                            errorRegister.style.display = 'block'
+                            
                         }
                         else{
-                            this.responseMessage = null
-                            errorInput.style.display = 'none'
+                            this.registerMessage = null
+                            errorRegister.style.display = 'none'
                             toastr.options.positionClass = 'toast-top-center'
                             toastr.options.closeButton = 'true'
-                            toastr.success("Susccesfully register!")
+                            toastr.success("Susccesfully register! Please log in again.")
+                            const registerInputs = document.querySelectorAll('#register-form input')
+                            for (var i = 0; i < registerInputs.length; i++) {
+                                registerInputs[i].value = '';
+                            }
+                            this.clickLoginTab()
                         }
-                        overlay.style.display = 'none'
+                        this.overlay.style.display = 'none'
                         
                         })
                     .catch(error => {
-                    this.responseMessage = null
-                    errorInput.style.display = 'none'
-                    overlay.style.display = 'none'
+                    this.registerMessage = null
+                    errorRegister.style.display = 'none'
+                    this.overlay.style.display = 'none'
                     console.error(error);
                     });
                 },
@@ -115,9 +150,23 @@
                 return null;
                 },
 
-            }
-        }
+            },
 
+            mounted(){
+                var registerLink = document.getElementById('register-link')
+                this.overlay = document.getElementById('overlay')
+                const vm = this
+
+                registerLink.addEventListener('click', function(e){
+                    e.preventDefault()
+                    vm.clickRegisterTab()
+                })
+
+                if (!this.csrfToken){
+                    axios.get('/sanctum/csrf-cookie')
+                }
+            },
+        }
 </script>
 
 <template>
@@ -145,7 +194,7 @@
                                                     <label for="name" class="col-form-label">Username</label>
                                                 </div>
                                                 <div class="col-13">
-                                                    <input type="text" id="login-name" class="form-control" name="name"  required autofocus autocomplete="on">
+                                                    <input type="text" id="login-name" class="form-control" name="name" v-model.lazy="loginData.username" required autofocus autocomplete="on">
                                                 </div>
 
                                             </div>
@@ -157,7 +206,7 @@
                                                 <label for="password" class="col-form-label">Password</label>
                                                 </div>
                                                 <div class="col-13 password-container">
-                                                    <input type="password" id="password" class="form-control" name="password"  required autofocus autocomplete="on">
+                                                    <input type="password" id="password" class="form-control" name="password" v-model.lazy="loginData.password" required autofocus autocomplete="on">
                                                     <i class="bi bi-eye-slash" id = "show-password-login" @click ="showPassword()"></i>
                                                 </div>
                                             </div>
@@ -171,6 +220,14 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <div class="errorInput" id = "errorLogin">
+                                                <ul >
+                                                    <li v-for="value in loginMessage">
+                                                        {{ value }}
+                                                    </li>
+                                                </ul>
                                         </div>
                                     
                                         <div class="row">
@@ -208,7 +265,7 @@
                                                         <label for="name" class="col-form-label">Username</label>
                                                     </div>
                                                     <div class="col-13">
-                                                        <input type="text" id="name" class="form-control" name="name" v-model.lazy ="signUpData.username" required autofocus>
+                                                        <input type="text" id="name" class="form-control" name="name" v-model.lazy ="signUpData.username" required autofocus >
                                                     </div>
 
                                                 </div>
@@ -220,14 +277,14 @@
                                                     <label for="password" class="col-form-label">Password</label>
                                                     </div>
                                                     <div class="col-13 password-container" >
-                                                        <input type="password" id="password-register" class="form-control" name="password" v-model.lazy="signUpData.password" required autofocus >
+                                                        <input type="password" id="password-register" class="form-control" name="password" v-model.lazy="signUpData.password" required autofocus autocomplete="off">
                                                         <i class="bi bi-eye-slash" id = "show-password-register" @click ="showPasswordRegister()"></i>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div id="errorInput">
+                                            <div class="errorInput" id = "errorRegister">
                                                 <ul >
-                                                    <li v-for="value in responseMessage">
+                                                    <li v-for="value in registerMessage">
                                                         {{ value }}
                                                     </li>
                                                 </ul>
@@ -361,7 +418,7 @@
         caret-color: transparent;
     }
 
-    #errorInput{
+    .errorInput{
         color:red;
         overflow-y: auto;
         display: none;
