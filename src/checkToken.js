@@ -1,9 +1,7 @@
 import store from "./store";
-import axios from "axios";
-
 
 async function checkToken(){
-    await axios.get('/api/checkToken').then(response=>{
+    await this.axios.get('/api/checkToken').then(response=>{
         if (response.data['code'] == 0){
             store.dispatch('authenticate')
         }
@@ -11,10 +9,10 @@ async function checkToken(){
             store.dispatch('logout')
         }
     })
+
+    setTimeout(checkToken, 15000)
 }
 
 export function cookieValidate(){
-    setInterval(()=>{
-        checkToken();
-    },15000)
+    checkToken()
 }

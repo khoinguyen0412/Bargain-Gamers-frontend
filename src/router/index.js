@@ -24,7 +24,9 @@ const router = createRouter({
     },
 
     {
-      path: '/profile/:username'      
+      path: '/profile/:username',
+      name: 'profile',
+      component: () => import('../views/UserProfileView.vue'),
     },
 
 
@@ -47,16 +49,16 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async(to,from,next) => {
-  if (to.meta.auth && !store.getters.getAuth){
-      next("/auth")
-  }
-  if(!to.meta.auth && store.getters.getAuth){
-    next("/404")
-  }
-  else{
-    next()
-  }
-})
+// router.beforeEach(async(to,from,next) => {
+//   if (to.meta.auth && !store.getters.getAuth){
+//       next("/auth")
+//   }
+//   if(!to.meta.auth && store.getters.getAuth){
+//     next("/404")
+//   }
+//   else{
+//     next()
+//   }
+// })
 
 export default router

@@ -6,7 +6,7 @@ const store = new Vuex.Store({
         authenticated: null,
     },
     mutations:{
-        setAuth(){
+        setAuth(state){
             state.authenticated = true
         },
         clearToken(state){

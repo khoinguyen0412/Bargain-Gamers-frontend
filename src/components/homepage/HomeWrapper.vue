@@ -102,7 +102,6 @@ export default {
 .wrapper{
       scroll-snap-type: x mandatory;
       display:flex;
-      height: 100vh;
       width: 100vw;
       /* overflow-x: hidden; */
       overflow-y: hidden;

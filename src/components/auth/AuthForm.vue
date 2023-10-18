@@ -1,8 +1,3 @@
-<script setup>
-    import axios from 'axios'
-
-</script>
-
 <script>
     export default{
         data(){
@@ -19,7 +14,6 @@
                 overlay:null,
                 loginMessage: null,
                 registerMessage:null,
-                csrfToken: this.getCookie('XSRF-TOKEN')
             }
         },
 
@@ -66,14 +60,14 @@
                 const errorLogin = document.getElementById('errorLogin')
                 this.overlay.style.display = 'flex'
     
-                await axios.post('/api/login',{
+                await this.axios.post('/api/login',{
                     username: this.loginData['username'],
                     password: this.loginData['password'],
                 })
                 .then(response =>{
                     if(response.data['code'] != 1){
                         errorLogin.style.display = 'block'
-                        this.$store.dispatch('login')
+                        this.$store.dispatch('authenticate')
                         toastr.options.positionClass = 'toast-top-center'
                         toastr.options.closeButton = 'true'
                         toastr.success("Susccesfully login!")
@@ -103,7 +97,7 @@
 
                 this.overlay.style.display = 'flex'
                 
-                await axios.post('/api/register',{
+                await this.axios.post('/api/register',{
                         username: this.signUpData['username'],
                         email: this.signUpData['email'],
                         password: this.signUpData['password'],
@@ -162,9 +156,7 @@
                     vm.clickRegisterTab()
                 })
 
-                if (!this.csrfToken){
-                    axios.get('/sanctum/csrf-cookie')
-                }
+                
             },
         }
 </script>
@@ -251,7 +243,7 @@
                                             <div class="mb-2 row">
                                                 <div class="row align-items-start">
                                                     <div class="col-2">
-                                                        <label for="name" class="col-form-label">Email</label>
+                                                        <label for="email" class="col-form-label">Email</label>
                                                     </div>
                                                     <div class="col-13">
                                                         <input type="email" id="email" class="form-control" name="email" v-model.lazy = "signUpData.email" required autofocus>
@@ -318,6 +310,7 @@
     }
    .auth-section{
     display:flex;
+    width: 100vw;
     height:100vh;
     align-items: center;
     justify-content: center;
