@@ -34,13 +34,14 @@
 <style scoped>
 .wrapper{
     width: 100vw;
+    position: relative;
 }
 
 .about-section{
     display: flex;
     height: 350px;
     padding-top: 100px;
-    opacity:0;
+    opacity:1;
     transform: translateY(-150px);
     transition: 1.5s all ease;
 }
@@ -51,7 +52,6 @@
 
 .about-section.fade-top{
   transform: translateY(0);
-  opacity: 1;
 }
 
 

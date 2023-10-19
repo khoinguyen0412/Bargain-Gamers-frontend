@@ -1,5 +1,5 @@
 <template>
-    <header id = "head" class="p-2 bg-dark">
+    <header class="p-2 bg-dark">
       
       <div id="logo-container">
           <RouterLink :to = "{name:'home'}">
@@ -13,11 +13,11 @@
       
       <div id="home-nav">
             <div v-if="$route.path === '/'">
-                <a class="box activeBox" id="box-home">
+                <a class="home box activeBox" id="box-home">
                 Home</a>
-                <a class="box" id="box-about">
+                <a class="about box" id="box-about">
                 About</a>
-                <a class="box" id="box-more">
+                <a class="more box" id="box-more">
                 More</a>
             </div>
       </div>
@@ -48,10 +48,11 @@
     header{
         font-family: 'Roboto';
         display: flex;
-        width:100%;
+        width:100vw;
         z-index: 100;
         position:fixed;
         caret-color: transparent;
+        
     }
 
     #logo-container{
@@ -139,7 +140,7 @@
     background:rgb(206,2,65);
     height: 37px;
     border-radius: 5px;
-    pointer-events: none;
+    /* pointer-events: none; */
     }
 
     @media (hover: hover) {

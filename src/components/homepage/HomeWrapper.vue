@@ -8,7 +8,7 @@
 <script>
 export default {
     mounted(){
-        this.scrollToMemorized()
+        // this.scrollToMemorized()
         const navElements = document.querySelectorAll(".box")
         const wrapper = document.querySelectorAll(".wrapper")[0]
         const sections = document.querySelectorAll(".homepage-section")
@@ -91,35 +91,41 @@ export default {
 </script >
 
 <template>
-    <div class = "wrapper">
-        <HomeSection></HomeSection>
-        <AboutSection></AboutSection>
-        <MoreSection></MoreSection>
-    </div>
+    <HomeSection class="shared-style"></HomeSection>
+    <AboutSection class="shared-style"></AboutSection>
+    <MoreSection class="shared-style"></MoreSection>
+    
 </template>
 
 <style scoped>
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent default scrollbars */
+}
 .wrapper{
-      scroll-snap-type: x mandatory;
-      display:flex;
-      width: 100vw;
-      /* overflow-x: hidden; */
-      overflow-y: hidden;
-    }
+    scroll-snap-type: y mandatory;
+    display: flex;
+    flex-direction: column;
+    height: 300%;
+    width: 100vw;
+    overflow-y: scroll;
+}
 
 .wrapper::-webkit-scrollbar{
     display: none;
 }
 
-.homepage-section{
+
+.shared-style{
+    flex:1;
     cursor:default;
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    position: relative;
-    padding-top: 96px;
     background-image: url(../images/background-image.jpg);
-    height: 100vh;
-    min-width:100vw;
+    min-height: 100vh;
+    max-width: 100vw;
     display: flex;
     caret-color: transparent;
 }
