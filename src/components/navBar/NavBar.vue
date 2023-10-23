@@ -1,3 +1,70 @@
+
+<script>
+    import { mapState } from 'vuex';
+    export default{
+        computed:{
+            ...mapState(['authenticated']) 
+            
+        },
+
+        data(){
+            return{
+                dropDown: false,
+            }
+        },
+
+        methods: {
+            dropDownProfile(){
+                const dropDown = document.getElementById("user-dropdown")
+                const profilePicture =document.getElementById("profile-img")
+
+                dropDown.style.display = "block"
+
+                document.addEventListener("click", function (event) {
+                    if (event.target !== profilePicture && event.target !== dropDown) {
+                        dropDown.style.display = "none";
+                        }
+                    });
+                
+
+                profilePicture.addEventListener("click", function (event) {
+                    event.stopPropagation()
+                    if (dropDown.style.display === "block") {
+                        dropDown.style.display = "none";
+                    } else {
+                        dropDown.style.display = "block";
+                    }
+                    });
+                },
+
+            toggleDropDown(){
+                this.dropDown = !this.dropDown;
+
+                if(this.dropDown){
+                    document.getElementById("user-dropdown").style.display = "block";
+                }
+                else{
+                    document.getElementById("user-dropdown").style.display = "none";
+                }
+            },
+
+            closeDropdown(event){
+                if(this.dropDown && !document.getElementById('user-dropdown').contains(event.target)){
+                    this.dropDown = false
+                    document.getElementById("user-dropdown").style.display = "none";
+                }
+            }
+
+        },
+
+        mounted(){
+            document.addEventListener("click", this.closeDropdown)
+        }
+    }
+
+</script>
+
+
 <template>
     <header class="p-2 bg-dark">
       
@@ -22,9 +89,17 @@
             </div>
       </div>
       
-            <div class = "text-end" id = "auth-container">
+            <div v-if = "!authenticated" class = "text-end auth-container">
                         <RouterLink v-if="$route.path==='/'" to="/auth" id="login-button">Join Us</RouterLink>
                         <button v-if="$route.path==='/auth'" id="login-button-active">Join Us</button>
+            </div>
+
+            <div v-else class="auth-container">
+                <div class="username">nguyenkhoi2227</div>
+                <div class="profile-pic">
+                    <img id= "profile-img" class="profile-img" src="../images/default-profile.jpg" alt="profile-pic" @click="toggleDropDown">
+                    <div class="user-action" id="user-dropdown"></div>
+                </div>
             </div>
     </header>
 </template>
@@ -70,12 +145,14 @@
         padding-top: 58px;
     }
 
-    #auth-container{
+    .auth-container{
         display: flex;
         align-items: flex-end;
         justify-content:end;
         width: 30%;
         margin-bottom: 15px;
+        color:white;
+        padding-right: 15px;
     }
 
     #site-name a{
@@ -140,7 +217,6 @@
     background:rgb(206,2,65);
     height: 37px;
     border-radius: 5px;
-    /* pointer-events: none; */
     }
 
     @media (hover: hover) {
@@ -150,5 +226,44 @@
         border-width: 0 medium 0 medium;
   }
 }
+
+.username{
+    height:50px;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.profile-pic{
+    height: 50px;
+    width:50px;
+    position: relative;
+}
+
+
+.profile-img{
+    z-index:105px;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.user-action{
+    display: none;
+    position: absolute;
+    background-color: white;
+    height: 100px;
+    width: 200px;
+    bottom: -105px;
+    left: -155px;
+}
+
+.user-action:focus{
+
+}
+
    
 </style>

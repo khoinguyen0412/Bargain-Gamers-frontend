@@ -1,11 +1,14 @@
 <script setup>
     import {RouterView } from 'vue-router'
+    import { cookieValidate } from './checkToken'
+    
     window.addEventListener("load",function(){
+        cookieValidate()
         setTimeout(function(){
             $("#loader-wrapper").fadeOut("slow",function(){
             $(this).remove()
         })
-        },500)
+        },1000)
     })
 
 </script>
