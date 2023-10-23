@@ -193,7 +193,7 @@
                     <div class="detail-info">{{ dataProp.age }}</div>
                 </div>
                 <div class="info-tag">Gender:
-                    <div class="detail-info">{{ dataProp.gender }}</div>
+                    <div class="detail-info">{{ displayGender }}</div>
                 </div>
                 <div class="info-tag">Posts:
                     <div class="detail-info">{{ dataProp.posts }}</div>
