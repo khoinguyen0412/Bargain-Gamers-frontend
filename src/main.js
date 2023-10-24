@@ -14,6 +14,6 @@ axios.get('/sanctum/csrf-cookie')
 app.use(router);
 app.use(store);
 
-// cookieValidate();
+cookieValidate();
 
 app.mount('#app')

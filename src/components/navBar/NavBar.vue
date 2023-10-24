@@ -14,29 +14,6 @@
         },
 
         methods: {
-            dropDownProfile(){
-                const dropDown = document.getElementById("user-dropdown")
-                const profilePicture =document.getElementById("profile-img")
-
-                dropDown.style.display = "block"
-
-                document.addEventListener("click", function (event) {
-                    if (event.target !== profilePicture && event.target !== dropDown) {
-                        dropDown.style.display = "none";
-                        }
-                    });
-                
-
-                profilePicture.addEventListener("click", function (event) {
-                    event.stopPropagation()
-                    if (dropDown.style.display === "block") {
-                        dropDown.style.display = "none";
-                    } else {
-                        dropDown.style.display = "block";
-                    }
-                    });
-                },
-
             toggleDropDown(){
                 this.dropDown = !this.dropDown;
 
@@ -48,18 +25,21 @@
                 }
             },
 
-            closeDropdown(event){
-                if(this.dropDown && !document.getElementById('user-dropdown').contains(event.target)){
-                    this.dropDown = false
-                    document.getElementById("user-dropdown").style.display = "none";
-                }
+            async logout(){
+                await this.axios.post('api/logout')
+                .then(response=>{
+                    if(response.data['code'] == '0'){
+                        toastr.options.positionClass = 'toast-top-center'
+                        toastr.options.closeButton = 'true'
+                        toastr.success("Susccesfully logout")
+                    }
+                })
+                .catch(error=>{
+                    console.log(error)
+                })
             }
 
         },
-
-        mounted(){
-            document.addEventListener("click", this.closeDropdown)
-        }
     }
 
 </script>
@@ -98,7 +78,11 @@
                 <div class="username">nguyenkhoi2227</div>
                 <div class="profile-pic">
                     <img id= "profile-img" class="profile-img" src="../images/default-profile.jpg" alt="profile-pic" @click="toggleDropDown">
-                    <div class="user-action" id="user-dropdown"></div>
+                    <div class="user-action" id="user-dropdown">
+                        <div class="dropdown-option" id="view-profile">View Profile</div>
+                        <div class="dropdown-option" id="view-post">View Posts</div>
+                        <div class="dropdown-option" id="logout" @click="logout" >Logout</div>
+                    </div>
                 </div>
             </div>
     </header>
@@ -259,11 +243,19 @@
     width: 200px;
     bottom: -105px;
     left: -155px;
+    background-color: #555;
 }
 
-.user-action:focus{
-
+.dropdown-option{
+    color:white;
+    padding-left: 5px;
+    padding-top: 5px;
+    cursor: pointer;
 }
 
+.dropdown-option:hover{
+    background-color: bisque;
+    color:black;
+}
    
 </style>

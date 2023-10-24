@@ -3,7 +3,6 @@
     import { cookieValidate } from './checkToken'
     
     window.addEventListener("load",function(){
-        cookieValidate()
         setTimeout(function(){
             $("#loader-wrapper").fadeOut("slow",function(){
             $(this).remove()
