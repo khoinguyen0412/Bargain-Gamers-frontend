@@ -3,8 +3,7 @@
     import { mapState } from 'vuex';
     export default{
         computed:{
-            ...mapState(['authenticated']) 
-            
+            ...mapState(['authenticated','curr_user'])            
         },
 
         data(){
@@ -29,9 +28,7 @@
                 await this.axios.post('api/logout')
                 .then(response=>{
                     if(response.data['code'] == '0'){
-                        toastr.options.positionClass = 'toast-top-center'
-                        toastr.options.closeButton = 'true'
-                        toastr.success("Susccesfully logout")
+                        window.location.href='/auth'
                     }
                 })
                 .catch(error=>{
@@ -75,7 +72,7 @@
             </div>
 
             <div v-else class="auth-container">
-                <div class="username">nguyenkhoi2227</div>
+                <div class="username">{{ curr_user }}</div>
                 <div class="profile-pic">
                     <img id= "profile-img" class="profile-img" src="../images/default-profile.jpg" alt="profile-pic" @click="toggleDropDown">
                     <div class="user-action" id="user-dropdown">

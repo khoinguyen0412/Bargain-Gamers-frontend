@@ -31,13 +31,22 @@ const router = createRouter({
 
 
     {
-      path: '/profile/:username/edit',
-      meta: {auth: true},
+      path: '/profile',
+      name: 'profile-redirect',
+      beforeEnter:(async(to,from,next)=>{
+          console.log(store.state.authenticated)
+          if(store.state.authenticated){
+              next(`/profile/${store.state.curr_user}`)
+          }
+          else{
+              next('/auth')
+          }
+      })
     },
 
     {
       path:  '/:catchAll(.*)',
-      redirect: '404'
+      redirect: '404',
     },
 
    
