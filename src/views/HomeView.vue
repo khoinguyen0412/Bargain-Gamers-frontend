@@ -42,8 +42,7 @@ export default{
                 current= section.getAttribute('id')
             }
         })
-        // console.log(current)
-        document.querySelector("#"+ (`box-${current}`)).click()
+        
   
         navElements.forEach((navElement)=>{
             navElement.classList.remove("activeBox")
@@ -65,7 +64,6 @@ export default{
         scrollToMemorized(){
             var lastSection = this.getCookie("scrollPosition")
             if (lastSection != null || lastSection != undefined){
-                // document.querySelector("#"+ lastSection).scrollIntoView(true)
                 const element = document.getElementById(lastSection)
                 window.scrollTo({
                       top: element.offsetTop,

@@ -1,6 +1,7 @@
 
 <script>
     import { mapState } from 'vuex';
+
     export default{
         computed:{
             ...mapState(['authenticated','curr_user'])            
@@ -12,16 +13,23 @@
             }
         },
 
+
         methods: {
             toggleDropDown(){
                 this.dropDown = !this.dropDown;
+            },
 
-                if(this.dropDown){
-                    document.getElementById("user-dropdown").style.display = "block";
+            blurMenu(event){
+                if(this.dropDown && event.target.id !== "profile-img"){
+                    const menu = document.getElementById('user-dropdown')
+                    if(!menu.contains(event.target)){
+                        this.dropDown = false;
+                    }
                 }
-                else{
-                    document.getElementById("user-dropdown").style.display = "none";
-                }
+            },
+
+            viewProfile(){
+                this.$router.push("/profile")
             },
 
             async logout(){
@@ -37,6 +45,10 @@
             }
 
         },
+
+        mounted(){
+            document.addEventListener('click', this.blurMenu)
+        }
     }
 
 </script>
@@ -75,8 +87,8 @@
                 <div class="username">{{ curr_user }}</div>
                 <div class="profile-pic">
                     <img id= "profile-img" class="profile-img" src="../images/default-profile.jpg" alt="profile-pic" @click="toggleDropDown">
-                    <div class="user-action" id="user-dropdown">
-                        <div class="dropdown-option" id="view-profile">View Profile</div>
+                    <div v-if="dropDown" class="user-action" id="user-dropdown">
+                        <div class="dropdown-option" id="view-profile" @click="viewProfile">View Profile</div>
                         <div class="dropdown-option" id="view-post">View Posts</div>
                         <div class="dropdown-option" id="logout" @click="logout" >Logout</div>
                     </div>
@@ -233,7 +245,7 @@
 }
 
 .user-action{
-    display: none;
+    display: block;
     position: absolute;
     background-color: white;
     height: 100px;
