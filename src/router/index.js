@@ -34,7 +34,6 @@ const router = createRouter({
       path: '/profile',
       name: 'profile-redirect',
       beforeEnter:(async(to,from,next)=>{
-          console.log(store.state.authenticated)
           if(store.state.authenticated){
               next(`/profile/${store.state.curr_user}`)
           }

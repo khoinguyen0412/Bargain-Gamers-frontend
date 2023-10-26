@@ -43,11 +43,13 @@ export default{
             }
         })
         
+        
   
         navElements.forEach((navElement)=>{
             navElement.classList.remove("activeBox")
             if(navElement.classList.contains(current)){
               navElement.classList.add("activeBox")
+              document.querySelector(`#${current}`).scrollIntoView(true)
             }
         })
             
@@ -112,7 +114,7 @@ export default{
 }
 .home-wrapper{
     scroll-snap-type: y mandatory;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     /* overflow-y: scroll; */
 }

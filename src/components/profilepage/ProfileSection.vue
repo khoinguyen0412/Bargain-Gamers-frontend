@@ -5,7 +5,6 @@
             loadingState: Boolean,
         }
     }
-
 </script>
 
 <template>

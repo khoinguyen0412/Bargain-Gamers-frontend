@@ -81,12 +81,12 @@
     <NavBar></NavBar>
     <main>
         <loadingOverlay></loadingOverlay>
-        <ProfileSection :dataProp="briefInfo" :loadingState="loadingState"/>
-        <InfoSection ref="InfoRef" :dataProp="detailedInfo" :loadingState="loadingState"/>
+        <ProfileSection :dataProp="briefInfo" :loadingState="loadingState"></ProfileSection>
+        <InfoSection ref="InfoRef" :dataProp="detailedInfo" :loadingState="loadingState"></InfoSection>
     </main>
 </template>
 
-<style>
+<style scoped>
 
 main{
     background-color: gray;

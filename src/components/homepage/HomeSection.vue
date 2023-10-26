@@ -1,7 +1,3 @@
-<script setup>
-    import { RouterLink} from 'vue-router'
-</script>
-
 <template>
     <div class="homepage-section" id="home">
         <div id = "welcome-section">
@@ -9,7 +5,7 @@
                 <h1 id="welcome-1">Made for gamers.</h1>
                 <h1 id="welcome-2">Game on a budget !</h1>
                 <p>Connect with other players, find everything about your favorite games. What are you waiting for?</p>
-                <RouterLink to = "/auth"  id = "start-button" class="btn btn-danger" style ="background-color:rgb(206,2,65)"> Get Started 
+                <RouterLink to = "/profile"  id = "start-button" class="btn btn-danger" style ="background-color:rgb(206,2,65)"> Get Started 
                     <i class="bi bi-arrow-right "></i>
                 </RouterLink>
             </div>

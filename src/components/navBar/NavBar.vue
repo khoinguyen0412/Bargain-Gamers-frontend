@@ -30,6 +30,7 @@
 
             viewProfile(){
                 this.$router.push("/profile")
+                this.dropDown = false
             },
 
             async logout(){
