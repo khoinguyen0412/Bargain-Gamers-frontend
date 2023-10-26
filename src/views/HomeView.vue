@@ -119,9 +119,6 @@ export default{
     /* overflow-y: scroll; */
 }
 
-.nav-bar{
-  width: 99.2vw;
-} 
 .home-wrapper::-webkit-scrollbar{
   background: #5555;
   width: 0.8vw;

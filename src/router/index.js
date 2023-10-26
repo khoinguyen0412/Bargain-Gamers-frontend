@@ -57,16 +57,18 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach(async(to,from,next) => {
-//   if (to.meta.auth && !store.getters.getAuth){
-//       next("/auth")
-//   }
-//   if(!to.meta.auth && store.getters.getAuth){
-//     next("/404")
-//   }
-//   else{
-//     next()
-//   }
-// })
+router.beforeEach(async(to,from,next) => {
+  if (to.matched.some(record => record.meta.auth === false)){
+    if(store.getters.getAuth){
+        next('/main')  
+    }
+    else{
+      next()
+    }
+  }
+  else{
+    next()
+  }
+})
 
 export default router

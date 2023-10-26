@@ -5,9 +5,11 @@
 
 <template>
     <NavBar></NavBar>
-    <div class="section" style="background-color: aqua;">Section 1</div>
-    <div class="section" style="background-color: black;">Section 2</div>
-    <div class="section" style="background-color: red;">Section 3</div>
+    <main>
+        <div class="section" style="background-color: aqua;">Section 1</div>
+        <div class="section" style="background-color: black;">Section 2</div>
+        <div class="section" style="background-color: red;">Section 3</div>
+    </main>
 </template>
 
 <style scoped>

@@ -1,8 +1,10 @@
+<script setup>
+    import { mapState } from 'vuex';
+</script>
 
 <script>
-    import { mapState } from 'vuex';
 
-    export default{
+export default{
         computed:{
             ...mapState(['authenticated','curr_user'])            
         },
@@ -14,7 +16,7 @@
         },
 
 
-        methods: {
+        methods:{
             toggleDropDown(){
                 this.dropDown = !this.dropDown;
             },
@@ -37,7 +39,7 @@
                 await this.axios.post('api/logout')
                 .then(response=>{
                     if(response.data['code'] == '0'){
-                        window.location.href='/auth'
+                        window.location.href='/'
                     }
                 })
                 .catch(error=>{
@@ -49,7 +51,7 @@
 
         mounted(){
             document.addEventListener('click', this.blurMenu)
-        }
+        },
     }
 
 </script>
@@ -80,8 +82,8 @@
       </div>
       
             <div v-if = "!authenticated" class = "text-end auth-container">
-                        <RouterLink v-if="$route.path==='/'" to="/auth" id="login-button">Join Us</RouterLink>
-                        <button v-if="$route.path==='/auth'" id="login-button-active">Join Us</button>
+                    <RouterLink v-if="$route.path!=='/auth'" to="/auth" id="login-button">Join Us</RouterLink>
+                    <button v-if="$route.path==='/auth'" id="login-button-active">Join Us</button>
             </div>
 
             <div v-else class="auth-container">

@@ -12,5 +12,4 @@
     </main>
 </template>
 
-<style></style>
 

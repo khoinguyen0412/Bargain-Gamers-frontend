@@ -59,6 +59,7 @@
             async handleLogin(){
                 const errorLogin = document.getElementById('errorLogin')
                 this.overlay.style.display = 'flex'
+                const vm = this
     
                 await this.axios.post('/api/login',{
                     username: this.loginData['username'],
@@ -68,9 +69,8 @@
                     if(response.data['code'] != 1){
                         errorLogin.style.display = 'block'
                         this.$store.dispatch('authenticate')
-                        toastr.options.positionClass = 'toast-top-center'
-                        toastr.options.closeButton = 'true'
-                        toastr.success("Susccesfully login!")
+                        window.location.href='/main';
+    
                     }
                     else{
                         const errorArray = []
@@ -135,15 +135,6 @@
                     });
                 },
             
-            getCookie(name) {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) {
-                    return parts.pop().split(';').shift();
-                }
-                return null;
-                },
-
             },
 
             mounted(){
@@ -310,7 +301,7 @@
     }
    .auth-section{
     display:flex;
-    width: 100vw;
+    width: 100%;
     height:100vh;
     align-items: center;
     justify-content: center;
