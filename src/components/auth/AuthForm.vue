@@ -308,6 +308,7 @@
     #register-link:hover{
         text-decoration: underline;
     }
+    
    .auth-section{
     display:flex;
     width: 100vw;
@@ -322,8 +323,8 @@
    .container{
         background-color: white;
         display:flex;
-        height: 500px;
-        width: 776px;
+        height: 70vh;
+        width: 60vw;
         padding-left: 0px;
         padding-right: 0px;
         margin-top: 50px;

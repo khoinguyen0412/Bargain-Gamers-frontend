@@ -121,6 +121,7 @@ body {
 .shared-style{
     flex:1;
     cursor:default;
+    padding: 200px 0px 200px 0px;
     scroll-snap-align: start;
     scroll-snap-stop: always;
     background-image: url(../images/background-image.jpg);
