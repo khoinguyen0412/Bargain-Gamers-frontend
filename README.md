@@ -1,6 +1,9 @@
 # bargain-gamers-frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+This is the current state of Bargain Gamers:
++ Home Page
++ Register Page
++ Profile Page for Each User
 
 ## Recommended IDE Setup
 
